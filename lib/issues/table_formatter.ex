@@ -12,4 +12,8 @@ defmodule Issues.TableFormatter do
 
   def printable(str), do: to_string(str)
 
+  def format_for( list_of_widths ) do
+    map_join( list_of_widths, " | ", fn width -> "~-#{width}s" end ) <> "~n"
+  end
+
 end
