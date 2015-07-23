@@ -1,10 +1,14 @@
 defmodule Issues.CLI do
-
+  import Issues.TableFormatter, only: [ printable_table_for_columns: 2 ]
   @default_count 5
 
   @moduledoc """
   Handle the command line parsing and the dispath to the various functions 
   """
+
+  def main(argv) do 
+    run(argv)
+  end
 
   def run(argv) do
     argv 
@@ -38,6 +42,7 @@ defmodule Issues.CLI do
     |> convert_to_hashdicts
     |> sort_by_create_date
     |> Enum.take(count)
+    |> printable_table_for_columns(["number", "created_at", "title"])
   end
 
   def decode_response({:ok, body}), do: body
@@ -46,7 +51,7 @@ defmodule Issues.CLI do
     {_, message} = List.keyfind(error, "message", 0)
     IO.puts "Error fetching from github #{message}"
     System.halt(2)
-  end
+  end 
 
   def convert_to_hashdicts( list ) do
     list |> Enum.map( &Enum.into( &1, HashDict.new ))

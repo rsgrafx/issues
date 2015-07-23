@@ -20,4 +20,26 @@ defmodule Issues.TableFormatter do
     for column <- columns, do: column |> map(&String.length/1) |> max
   end
 
+  def printable_table_for_columns( rows, headers) do
+    dclmns    = split_into_columns(rows, headers)
+    c_widths  = widths_of( dclmns )
+    format    = format_for( c_widths )
+
+    puts_one_line_in_columns headers, format
+    IO.puts separator(c_widths)
+    puts_in_columns dclmns, format
+  end
+
+  def separator(column_widths) do
+    map_join(column_widths, "-+-", fn width -> List.duplicate("-", width) end)
+  end
+
+  def puts_one_line_in_columns(fields, format) do 
+    :io.format(format, fields)
+  end
+
+  def puts_in_columns( data, format) do
+    data |> List.zip |> map( &Tuple.to_list/1 ) |> each(&puts_one_line_in_columns(&1, format))
+  end
+
 end
