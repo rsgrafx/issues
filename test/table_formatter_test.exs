@@ -25,7 +25,14 @@ defmodule TableFormatterTest do
     assert List.last(columns) == ["r1+++c4", "r2 c4", "r3 c4", "r4 c4"]
   end
 
-  test "column widths" do 
+  test "column width" do 
+    widths = TF.widths_of( split_with_three_columns )
+    assert widths == [5, 6, 7]
+  end
+
+  test "correct format of string returned" do 
     assert TF.format_for([9, 10, 11]) == "~-9s | ~-10s | ~-11s~n"
   end
+
+
 end

@@ -16,4 +16,8 @@ defmodule Issues.TableFormatter do
     map_join( list_of_widths, " | ", fn width -> "~-#{width}s" end ) <> "~n"
   end
 
+  def widths_of( columns ) do
+    for column <- columns, do: column |> map(&String.length/1) |> max
+  end
+
 end
